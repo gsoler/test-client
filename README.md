@@ -1,6 +1,9 @@
-# Getting Started with Create React App
+# test-client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This part is the web site developed in React. To start the application first of all you have to download all dependencies using npm install, then you have to run npm start to run it. The application has two main parts:
+
+App.js with his App.css, has the main part of the web site. The filters and the table. Also have the error page if can't connect to the server or data is empty.
+Pagination.js with his Pagination.css, has the pagination part of the table, and implements the management of pages shown in the paginator and the behaviour of itself.
 
 ## Available Scripts
 
