@@ -1,0 +1,63 @@
+.pagination {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.pagination .paginationInfo {
+  font-size: 11px;
+  text-align: center;
+}
+
+.pagination .paginationDots {
+  text-align: center;
+}
+
+.arrowDot,
+.pageDot {
+  cursor: pointer;
+}
+
+.arrowDot {
+  font-size: 27px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  color: #09375d;
+  font-weight: 700;
+  border: none;
+  background: none;
+  vertical-align: middle;
+}
+
+.arrowDot:hover {
+  color: #ff6600;
+}
+
+.pageDot {
+  font-family: Montserrat, Arial, sans-serif;
+  background-color: #00afca;
+  margin: 0 2px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 360px;
+  padding: 4px;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  line-height: 1.55em;
+  border: none;
+}
+
+.pageDot:hover {
+  background-color: #09375d;
+}
+
+.pageDot.currentDot {
+  background-color: #0a829e;
+  cursor: unset;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
