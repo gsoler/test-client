@@ -8,12 +8,17 @@ const COLUMNS = [{ name: 'id', label: 'ID' }, { name: 'name', label: 'Name' }, {
 const SORTABLE_FIELDS = ['id', 'name', 'createdOn'];
 const SORTABLE_OPTIONS = ['ASC', 'DESC'];
 
-const SERVER_URL = 'http://localhost:8080/king-data';
+const SERVER_URL = 'http://localhost:8080/';
+
+const STATUS_LIST_API = SERVER_URL + 'status-list';
+const DATA_TABLE_API = SERVER_URL + 'king-data';
 
 function App() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [elementList, setElementList] = useState([]);
+  const [resetPagination, setResetPagination] = useState(false);
+  const [statusOptions, setStatusOptions] = useState([]);
   const [itemName, setItemName] = useState('');
   const [itemStatus, setItemStatus] = useState(STATUS_OPTIONS[0]);
   const [sorting, setSorting] = useState({
@@ -26,9 +31,15 @@ function App() {
     if (!mounted.current || itemName !== mounted.previousName || itemStatus !== mounted.previousStatus
       || sorting.sortField !== mounted.previousSortField || sorting.sortDirection !== mounted.previousSortDirection) {
       if (!mounted.current) {
+        loadStatusList();
         mounted.current = true;
+      } else if (resetPagination) {
+        console.log('set false')
+        setResetPagination(false);
       } else {
-        loadPage(mounted.pageToLoad, mounted.pageSize);
+        console.log('set true')
+        setResetPagination(true);
+        //loadPage(mounted.pageToLoad, mounted.pageSize);
       }
 
       mounted.previousName = itemName;
@@ -36,7 +47,27 @@ function App() {
       mounted.previousSortField = sorting.sortField;
       mounted.previousSortDirection = sorting.sortDirection;
     }
-  });
+  }, [itemName, itemStatus, sorting.sortField, sorting.sortDirection, resetPagination]);
+
+  function loadStatusList() {
+    const options = {
+      method: 'GET'
+    }
+    fetch(STATUS_LIST_API, options)
+      .then(response => {
+        if (response.status === 200) {
+          return response.text();
+        } else {
+          setLoading(false);
+          return null;
+        }
+      }).then(text => {
+        const responseObject = JSON.parse(text);
+        setStatusOptions(responseObject);
+      }).catch(err => {
+        setLoading(false);
+      });
+  }
 
   async function loadPage(pageToLoad, pageSize) {
     setLoading(true);
@@ -46,7 +77,7 @@ function App() {
     const options = {
       method: 'GET'
     }
-    let serviceUrl = SERVER_URL + '?page=' + mounted.pageToLoad + '&pageSize=' + mounted.pageSize + '&sortField=' + sorting.sortField
+    let serviceUrl = DATA_TABLE_API + '?page=' + mounted.pageToLoad + '&pageSize=' + mounted.pageSize + '&sortField=' + sorting.sortField
       + '&sortDirection=' + sorting.sortDirection;
     if (itemName !== '') {
       serviceUrl += '&name=' + itemName;
@@ -109,7 +140,7 @@ function App() {
             <div className="filterField">
               <span>Status: </span>
               <select value={itemStatus} onChange={event => setItemStatus(event.target.value)}>
-                {STATUS_OPTIONS.map(option => <option key={option} value={option}>{option}</option>)}
+                {statusOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
               </select>
             </div>
           </div>
@@ -143,7 +174,7 @@ function App() {
               )}
             </tbody>
           </table>
-          <Pagination loadPage={loadPage} />
+          <Pagination resetPagination={resetPagination} resetEnd={() => setResetPagination(false)} loadPage={loadPage} />
 
           {loading ?
             <div className="pageLoadingLayout">
