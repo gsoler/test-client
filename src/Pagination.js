@@ -18,6 +18,9 @@ function Pagination(props) {
     if (!mounted.current) {
       changePage(currentPage);
       mounted.current = true;
+    } else if (props.resetPagination) {
+      changePage(DEFAULT_PAGE);
+      props.resetEnd();
     }
   });
 
