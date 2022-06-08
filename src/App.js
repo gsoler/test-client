@@ -34,12 +34,9 @@ function App() {
         loadStatusList();
         mounted.current = true;
       } else if (resetPagination) {
-        console.log('set false')
         setResetPagination(false);
       } else {
-        console.log('set true')
         setResetPagination(true);
-        //loadPage(mounted.pageToLoad, mounted.pageSize);
       }
 
       mounted.previousName = itemName;
